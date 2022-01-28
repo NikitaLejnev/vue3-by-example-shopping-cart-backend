@@ -14,7 +14,7 @@ CREATE TABLE orders (
   order_id INTEGER NOT NULL PRIMARY KEY,
   name TEXT NOT NULL,
   address TEXT NOT NULL,
-  phone NUMBER NOT NULL
+  phone TEXT NOT NULL
 );
 
 CREATE TABLE order_shop_items (

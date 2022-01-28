@@ -71,3 +71,9 @@ const schema = buildSchema(`
     login(user: User): Token
   }
 `);
+
+const root = {
+  ...shopItemResolvers,
+  ...orderResolvers,
+  ...authResolvers
+}

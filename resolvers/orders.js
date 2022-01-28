@@ -87,5 +87,21 @@ module.exports = {
 
     })
   },
-  
+  removeOrder: ({ orderId }) => {
+    const db = new sqlite3.Database('./db.sqlite');
+    return new Promise((resolve) => {
+      db.serialize(() => {
+        const delOrderShopItemsStmt = db.prepare("DELETE FROM order_shop_items WHERE order_id = (?)");
+        delOrderShopItemsStmt.run(orderId)
+        delOrderShopItemsStmt.finalize();
+
+        const delOrderStmt = db.prepare("DELETE FROM orders WHERE order_id = (?)");
+        delOrderStmt.run(orderId)
+        delOrderStmt.finalize();
+
+        resolve({ status: 'success' })
+      })
+      db.close();
+    })
+  },
 }

@@ -77,3 +77,22 @@ const root = {
   ...orderResolvers,
   ...authResolvers
 }
+
+const authMiddleware = (req, res, next) => {
+  const { query = '' } = req.body
+  const token = req.get('authorization')
+  const requiresAuth = query.includes('removeOrder') ||
+    query.includes('removeShopItem') ||
+    query.includes('addShopItem')
+  if (requiresAuth) {
+    try {
+      jwt.verify(token, 'secret');
+      next()
+      return
+    } catch (error) {
+      res.status(401).json({})
+      return
+    }
+  }
+  next();
+}

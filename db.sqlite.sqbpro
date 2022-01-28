@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="/home/b00n1n/Programming/Vue/shopping-cart/vue3-by-example-shopping-cart-backend/db.sqlite" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="1335"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,16:mainorder_shop_items"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1">DROP TABLE IF EXISTS order_shop_items;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS shop_items;
+
+CREATE TABLE shop_items (
+  shop_item_id INTEGER NOT NULL PRIMARY KEY,
+  name TEXT NOT NULL,
+  description TEXT NOT NULL,
+  price NUMBER NOT NULL,
+  image_url TEXT NOT NULL
+);
+
+CREATE TABLE orders (
+  order_id INTEGER NOT NULL PRIMARY KEY,
+  name TEXT NOT NULL,
+  address TEXT NOT NULL,
+  phone TEXT NOT NULL
+);
+
+CREATE TABLE order_shop_items (
+  order_id INTEGER NOT NULL,
+  shop_item_id INTEGER NOT NULL,
+  FOREIGN KEY (order_id) REFERENCES orders(order_id)
+  FOREIGN KEY (shop_item_id) REFERENCES shop_items(shop_item_id)
+);
+
+
+</sql><current_tab id="0"/></tab_sql></sqlb_project>

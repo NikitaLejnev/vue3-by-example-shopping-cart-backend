@@ -35,4 +35,16 @@ module.exports = {
       db.close();
     })
   },
+  removeShopItem: ({ shopItemId }) => {
+    const db = new sqlite3.Database('./db.sqlite');
+    return new Promise((resolve) => {
+      db.serialize(() => {
+        const stmt = db.prepare("DELETE FROM shop_items WHERE shop_item_id = (?)");
+        stmt.run(shopItemId)
+        stmt.finalize();
+        resolve({ status: 'success' })
+      })
+      db.close();
+    })
+  },
 }

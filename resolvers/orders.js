@@ -45,4 +45,47 @@ module.exports = {
       db.close();
     })
   },
+  addOrder: ({ order: { name, address, phone, ordered_items: orderedItems } }) => {
+    const db = new sqlite3.Database('./db.sqlite');
+    return new Promise((resolve) => {
+      db.serialize(() => {
+        const orderStmt = db.prepare(`
+          INSERT INTO orders (
+            name,
+            address,
+            phone
+          ) VALUES (?, ?, ?)
+        `);
+        orderStmt.run(name, address, phone)
+        orderStmt.finalize();
+
+        db.all(`
+          SELECT last_insert_rowid() AS order_id
+        `,
+          [],
+          (err, rows = []) => {
+            const [{ order_id: orderId }] = rows
+            db.serialize(() => {
+              const orderShopItemStmt = db.prepare(`
+                  INSERT INTO order_shop_items (
+                    order_id,
+                    shop_item_id
+                  ) VALUES (?, ?)
+                `);
+              for (const orderItem of orderedItems) {
+                const {
+                  shop_item_id: shopItemId
+                } = orderItem
+                orderShopItemStmt.run(orderId, shopItemId)
+              }
+              orderShopItemStmt.finalize()
+            })
+            resolve({ status: 'success' })
+            db.close();
+          });
+      })
+
+    })
+  },
+  
 }
